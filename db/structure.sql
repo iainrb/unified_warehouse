@@ -184,7 +184,6 @@ CREATE TABLE `sample` (
   `strain` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `consent_withdrawn` tinyint(1) NOT NULL DEFAULT '0',
   `donor_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phenotype` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'The phenotype of the sample as described in Sequencescape',
   PRIMARY KEY (`id_sample_tmp`),
   UNIQUE KEY `index_sample_on_id_sample_lims_and_id_lims` (`id_sample_lims`,`id_lims`),
   UNIQUE KEY `sample_uuid_sample_lims_index` (`uuid_sample_lims`),
@@ -235,7 +234,11 @@ CREATE TABLE `stock_resource` (
   `pico_pass` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'The recorded result for the pico green assay. A pass indicates a successful assay, not sufficient material.',
   `snp_count` int(11) DEFAULT NULL COMMENT 'The number of markers detected in genotyping assays',
   `measured_gender` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'The gender call base on the genotyping assay',
-  PRIMARY KEY (`id_stock_resource_tmp`)
+  PRIMARY KEY (`id_stock_resource_tmp`),
+  KEY `stock_resource_sample_fk` (`id_sample_tmp`),
+  KEY `stock_resource_study_fk` (`id_study_tmp`),
+  CONSTRAINT `stock_resource_sample_fk` FOREIGN KEY (`id_sample_tmp`) REFERENCES `sample` (`id_sample_tmp`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `stock_resource_study_fk` FOREIGN KEY (`id_study_tmp`) REFERENCES `study` (`id_study_tmp`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
